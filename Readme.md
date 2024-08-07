@@ -17,6 +17,7 @@
 
 ### NativePatch_GUI
 + ![1722243254](PNG/GUI.jpg)
+
 这是一个基于Win32 API的GUI程序。该示例展示了如何通过插入shellcode或其他方式修改程序的行为。主要特点包括：
 
 - 使用Win32 API创建图形界面,支持拖拽。
@@ -25,6 +26,7 @@
 
 ### NativePatch_MFC
 + ![17243483254](PNG/MFC.jpg)
+
 这是一个基于MFC框架的GUI程序，MFC框架提供了丰富的GUI组件，适合开发复杂的桌面应用程序。主要特点包括：
 
 - 使用MFC框架创建图形界面。
@@ -33,6 +35,7 @@
 
 ### DotnetPatch
 + ![17222434254](PNG/Dotnet.jpg)
+
 此子项目展示了如何对Dotnet程序集进行patch。通过修改IL代码或插入shellcode，可以改变程序集的行为。主要特点包括：
 
 - 使用IL修改技术对Dotnet程序集进行patch。
