@@ -9,29 +9,30 @@
 3. **DotnetPatch**: 针对Dotnet程序集的patch示例。
 4. **a**: 测试程序集。
 5. **test**: 被patch的Dotnet测试程序。
+6. **NativePatch**：控制台程序
 
 参考样本请见：[52pojie示例](https://www.52pojie.cn/thread-1900852-1-1.html)。
 
 ## 子项目说明
 
 ### NativePatch_GUI
++ ![1722243254](PNG/GUI.jpg)
+这是一个基于Win32 API的GUI程序。该示例展示了如何通过插入shellcode或其他方式修改程序的行为。主要特点包括：
 
-这是一个基于Win32 API的GUI程序，演示如何对一个Win32程序进行白patch。该示例展示了如何通过插入shellcode或其他方式修改程序的行为。主要特点包括：
-
-- 使用Win32 API创建图形界面。
+- 使用Win32 API创建图形界面,支持拖拽。
 - 展示如何在程序的不同部分插入自定义代码。
 - 提供详细的注释和文档，便于学习和理解。
 
 ### NativePatch_MFC
-
-这是一个基于MFC框架的GUI程序，演示了如何对MFC程序进行白patch。MFC框架提供了丰富的GUI组件，适合开发复杂的桌面应用程序。主要特点包括：
++ ![17243483254](PNG/MFC.jpg)
+这是一个基于MFC框架的GUI程序，MFC框架提供了丰富的GUI组件，适合开发复杂的桌面应用程序。主要特点包括：
 
 - 使用MFC框架创建图形界面。
 - 演示如何通过修改代码实现程序行为的改变。
 - 提供详细的注释和文档，便于学习和理解。
 
 ### DotnetPatch
-
++ ![17222434254](PNG/Dotnet.jpg)
 此子项目展示了如何对Dotnet程序集进行patch。通过修改IL代码或插入shellcode，可以改变程序集的行为。主要特点包括：
 
 - 使用IL修改技术对Dotnet程序集进行patch。
