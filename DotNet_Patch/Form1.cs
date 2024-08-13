@@ -58,32 +58,38 @@ namespace DotNet_Patch
             assembly.Write(@"temp.exe");
             File.WriteAllBytes("ILRepack.exe", Resource1.ILRepack);
             File.WriteAllBytes("ILRepack.runtimeconfig.json",Resource1.ILRepack_runtimeconfig);
-            // 创建一个新的进程启动信息对象
-            ProcessStartInfo startInfo = new ProcessStartInfo();
 
-            // 设置要启动的应用程序的路径
-            startInfo.FileName = "ILRepack.exe";
-
-            // 设置要传递给应用程序的参数
-            startInfo.Arguments = $"/out:{textBox_exe.Text}_Patch.exe temp.exe {textBox_dll.Text}";
-
-            // 创建并启动进程
-            Thread.Sleep(1000);
-            Process process = new Process();
-            process.StartInfo = startInfo;
-
-            try
+            if (checkBox1.Checked)
             {
-                process.Start();
-                MessageBox.Show($"已保存至    {textBox_exe.Text}_Patch.exe");
-                File.Delete("ILRepack.exe");
-                File.Delete("ILRepack.runtimeconfig.json");
-                File.Delete("temp.exe");
+                // 创建一个新的进程启动信息对象
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+
+                // 设置要启动的应用程序的路径
+                startInfo.FileName = "ILRepack.exe";
+
+                // 设置要传递给应用程序的参数
+                startInfo.Arguments = $"/out:{textBox_exe.Text}_Patch.exe temp.exe {textBox_dll.Text}";
+
+                // 创建并启动进程
+                Thread.Sleep(1000);
+                Process process = new Process();
+                process.StartInfo = startInfo;
+
+                try
+                {
+                    process.Start();
+                    MessageBox.Show($"已保存至    {textBox_exe.Text}_Patch.exe");
+                    File.Delete("ILRepack.exe");
+                    File.Delete("ILRepack.runtimeconfig.json");
+                    File.Delete("temp.exe");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("启动合并程序时发生错误: " + ex.Message);
+                }
+                MessageBox.Show($"已保存至temp.exe");
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("启动合并程序时发生错误: " + ex.Message);
-            }
+            
 
         }
     }

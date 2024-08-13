@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include <windows.h>
-
+#include "ico.h"
 class PEFile {
 public:
     PEFile(const std::string& filePath);
