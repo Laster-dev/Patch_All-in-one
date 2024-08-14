@@ -48,6 +48,12 @@
     <ClInclude Include="RemoveAuthenticodeSignature.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MyButton.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CResourceExtractor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NativePatch_MFC.cpp">
@@ -57,6 +63,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MyButton.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ico.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CResourceExtractor.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

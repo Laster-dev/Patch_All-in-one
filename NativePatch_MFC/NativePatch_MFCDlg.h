@@ -41,4 +41,7 @@ private:
 	CFont m_font;    // 字体对象
 	CBrush m_brush;  // 用于背景颜色的画刷
 	static CEdit* s_pLogEdit; // 静态指针指向日志编辑框控件
+public:
+	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+	CMFCButton CMFCButton_OK;
 };

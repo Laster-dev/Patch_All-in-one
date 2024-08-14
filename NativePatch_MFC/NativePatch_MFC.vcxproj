@@ -188,8 +188,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ConsoltoGUI.h" />
+    <ClInclude Include="CResourceExtractor.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="ico.h" />
+    <ClInclude Include="MyButton.h" />
     <ClInclude Include="NativePatch_MFC.h" />
     <ClInclude Include="NativePatch_MFCDlg.h" />
     <ClInclude Include="Patch.h" />
@@ -200,6 +202,9 @@
     <ClInclude Include="UAC.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CResourceExtractor.cpp" />
+    <ClCompile Include="ico.cpp" />
+    <ClCompile Include="MyButton.cpp" />
     <ClCompile Include="NativePatch_MFC.cpp" />
     <ClCompile Include="NativePatch_MFCDlg.cpp" />
     <ClCompile Include="pch.cpp">

@@ -18,11 +18,17 @@
 #include "RemoveAuthenticodeSignature.h"
 #include "UAC.h"
 #include "ConsoltoGUI.h"
+#include "CResourceExtractor.h"
+#include "MyButton.h"
 using namespace std;
 
 // 静态成员初始化
 CEdit* CNativePatchMFCDlg::s_pLogEdit = nullptr;
 CFont m_font;
+
+
+// 全局变量
+
 // CNativePatchMFCDlg 对话框
 
 CNativePatchMFCDlg::CNativePatchMFCDlg(CWnd* pParent /*=nullptr*/)
@@ -36,6 +42,7 @@ void CNativePatchMFCDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_EDIT1, myfile2);
 	DDX_Control(pDX, IDC_EDIT_LOG, log_str);
+	DDX_Control(pDX, IDOK, CMFCButton_OK);
 }
 
 BEGIN_MESSAGE_MAP(CNativePatchMFCDlg, CDialogEx)
@@ -44,6 +51,7 @@ BEGIN_MESSAGE_MAP(CNativePatchMFCDlg, CDialogEx)
 	ON_BN_CLICKED(IDOK, &CNativePatchMFCDlg::OnBnClickedOk)
 	ON_WM_DROPFILES()
 	ON_WM_CTLCOLOR()
+	ON_WM_ERASEBKGND()
 END_MESSAGE_MAP()
 
 // CNativePatchMFCDlg 消息处理程序
@@ -51,20 +59,23 @@ END_MESSAGE_MAP()
 BOOL CNativePatchMFCDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-	// 设置 DWM 窗口属性，将标题栏设置为黑色
-	DWORD color = RGB(60,60,60); // 黑色
-	HRESULT hr = DwmSetWindowAttribute(m_hWnd, DWMWA_CAPTION_COLOR, &color, sizeof(color));
+	COLORREF borderColor = RGB(189,182, 253); // 边框
+	DwmSetWindowAttribute(m_hWnd, DWMWA_BORDER_COLOR, &borderColor, sizeof(borderColor));
 
-	if (FAILED(hr))
+	// 设置 DWM 窗口属性，将标题栏设置为黑色
+	DWORD color = RGB(51,51,51); // 黑色
+	HRESULT hr1 = DwmSetWindowAttribute(m_hWnd, DWMWA_CAPTION_COLOR, &color, sizeof(color));
+
+	if (FAILED(hr1))
 	{
 		// 处理错误
 		//AfxMessageBox(_T("无法设置标题栏颜色"));
 	}
-	CEdit* pEdit = (CEdit*)GetDlgItem(IDC_EDIT_LOG);
-	if (pEdit)
-	{
-		pEdit->ShowScrollBar(SB_BOTH, FALSE); // 隐藏水平和垂直滚动条
-	}
+	//CEdit* pEdit = (CEdit*)GetDlgItem(IDC_EDIT_LOG);
+	//if (pEdit)
+	//{
+	//	pEdit->ShowScrollBar(SB_BOTH, FALSE); // 隐藏水平和垂直滚动条
+	//}
 
 	// 创建Cascadia Code字体，设置为10pt大小
 	m_font.CreatePointFont(90, _T("微软雅黑"));
@@ -75,13 +86,18 @@ BOOL CNativePatchMFCDlg::OnInitDialog()
 	// 遍历所有控件并设置字体
 	while (pWnd)
 	{
-		pWnd->SetFont(&m_font); // 设置控件字体
+
+			pWnd->SetFont(&m_font); // 设置控件字体
+		
+
 		pWnd = pWnd->GetNextWindow(); // 获取下一个控件
 	}
 
 	// 设置对话框背景颜色
-	m_brush.CreateSolidBrush(RGB(60, 60, 60)); // 暗灰色背景
-	this->SetBackgroundColor(RGB(60, 60, 60));
+	m_brush.CreateSolidBrush(RGB(51,51,51)); // 暗灰色背景
+	this->SetBackgroundColor(RGB(51,51,51));
+
+
 
 	// 设置此对话框的图标。  当应用程序主窗口不是对话框时，框架将自动
 	// 执行此操作
@@ -103,12 +119,12 @@ HBRUSH CNativePatchMFCDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 	{
 		return m_brush;  // 返回自定义的背景画刷
 	}
-
+	
 	// 设置静态文本颜色
 	if (nCtlColor == CTLCOLOR_STATIC)
 	{
-		pDC->SetTextColor(RGB(180, 180, 188)); // 设置字体为白色
-		pDC->SetBkColor(RGB(60, 60, 60));      // 设置背景为暗灰色
+		pDC->SetTextColor(RGB(255, 255, 255)); // 设置字体为白色
+		pDC->SetBkColor(RGB(51, 51, 51));      // 设置背景为暗灰色
 		return m_brush;
 	}
 
@@ -116,24 +132,17 @@ HBRUSH CNativePatchMFCDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 	if (nCtlColor == CTLCOLOR_EDIT)
 	{
 		pDC->SetTextColor(RGB(255, 255, 255)); // 设置字体为白色
-		pDC->SetBkColor(RGB(60, 60, 60));     // 设置背景为暗灰色
+		pDC->SetBkColor(RGB(51, 51, 51));     // 设置背景为暗灰色
 		
-		return m_brush;
-	}
-
-	// 设置按钮背景颜色
-	if (nCtlColor == CTLCOLOR_BTN)
-	{
-		pDC->SetTextColor(RGB(255, 255, 255)); // 设置字体为白色
-		pDC->SetBkColor(RGB(60, 60, 60));      // 设置按钮背景为深灰色
 		return m_brush;
 	}
 	else
 	{
 		pDC->SetTextColor(RGB(255, 255, 255)); // 设置字体为白色
-		pDC->SetBkColor(RGB(60, 60, 60));      // 设置按钮背景为深灰色
+		pDC->SetBkColor(RGB(51, 51, 51));      // 设置按钮背景为深灰色
 		return m_brush;
 	}
+	HBRUSH hbr = CNativePatchMFCDlg::OnCtlColor(pDC, pWnd, nCtlColor);
 	// 对于未处理的情况，使用默认的处理方式
 	return CDialogEx::OnCtlColor(pDC, pWnd, nCtlColor);
 }
@@ -183,6 +192,38 @@ void RemoveQuotes(CString& str)
 	str.Remove(_T('\"'));
 }
 
+void writeToFile(const std::string& path, const std::vector<char>& bytes) {
+	// 将 std::string 转换为 LPCSTR (如果是 ANSI 字符集)
+	LPCSTR lpFileName = path.c_str();
+
+	// 创建或打开文件
+	HANDLE hFile = CreateFileA(lpFileName,           // 文件名
+		GENERIC_WRITE,        // 写入模式
+		0,                    // 不共享
+		NULL,                 // 默认安全属性
+		CREATE_ALWAYS,        // 始终创建
+		FILE_ATTRIBUTE_NORMAL,// 普通文件
+		NULL);                // 没有用于复制的模板文件
+
+	if (hFile == INVALID_HANDLE_VALUE) {
+		// 文件创建失败，可以根据需要处理错误
+		return;
+	}
+
+	DWORD written = 0;
+	BOOL result = WriteFile(hFile,                  // 文件句柄
+		bytes.data(),           // 写入的数据缓冲区
+		static_cast<DWORD>(bytes.size()),  // 要写入的字节数
+		&written,               // 写入的字节数
+		NULL);                  // 不重叠
+
+	if (!result || written != bytes.size()) {
+		// 写入失败，处理错误
+	}
+
+	// 关闭文件句柄
+	CloseHandle(hFile);
+}
 void CNativePatchMFCDlg::OnBnClickedOk()
 {
 	SetDlgItemText(IDC_EDIT_LOG, NULL);
@@ -192,23 +233,24 @@ void CNativePatchMFCDlg::OnBnClickedOk()
 	GetDlgItemText(IDC_EDIT1, modifyPeFilePath); // 获取文件路径
 	CString textOrPePath(_T(""));
 	GetDlgItemText(IDC_EDIT2, textOrPePath); // 获取另一个路径
+	CString icofilepath(_T(""));
+	GetDlgItemText(IDC_EDIT_ICO, icofilepath); // 获取文件路径
 	CString output = modifyPeFilePath + "_Patch.exe";
 	RemoveQuotes(modifyPeFilePath);
 	RemoveQuotes(textOrPePath);
 	RemoveQuotes(output);
+	RemoveQuotes(icofilepath);
 	CNativePatchMFCDlg::LogMessage(_T("[+]白文件路径："+ modifyPeFilePath));
 	CNativePatchMFCDlg::LogMessage(_T("[+]黑文件路径：" + textOrPePath));
+	CNativePatchMFCDlg::LogMessage(_T("[+]图标路径：" + icofilepath));
 	CNativePatchMFCDlg::LogMessage(_T("[+]输出路径：" + output));
 	std::vector<char> bytes = execute(CStringTostring(modifyPeFilePath), CStringTostring(textOrPePath));
 
-	if (((CButton*)GetDlgItem(IDC_CHECK_ICO))->GetCheck() == 1) // 需要修改ico
-	{
-		 changeIcon(&bytes,"C:\\Users\\Laster\\Pictures\\1.ico");
-		 //writeToFile("1.exe", bytes);
-	}
+	
 	if (!bytes.empty())
 	{
 		writeToFile(CStringTostring(output), bytes);//写出文件
+
 		if (((CButton*)GetDlgItem(IDC_CHECK_Signature))->GetCheck() == 1) // 需要修改签名
 		{
 			RemoveAuthenticodeSignature(output);
@@ -219,6 +261,58 @@ void CNativePatchMFCDlg::OnBnClickedOk()
 			std::wstring wstr(output.GetString());
 			std::wcout << L"[+] : " << wstr << std::endl;
 			ModifyManifestResource(wstr);
+		}
+		if (((CButton*)GetDlgItem(IDC_CHECK_ICO))->GetCheck() == 1) // 需要修改ico
+		{
+
+
+			// 查找最后一个点的位置
+			int dotIndex = icofilepath.ReverseFind(_T('.'));
+
+			if (dotIndex != -1) {
+				// 提取扩展名
+				CString extension = icofilepath.Mid(dotIndex + 1).MakeLower();
+
+				// 判断扩展名
+				if (extension == _T("exe")) {
+
+					//CNativePatchMFCDlg::LogMessage(_T("[+]开始提取exe图标："+ icofilepath));
+					CResourceExtractor obj;
+
+					obj.Load(static_cast<const wchar_t*>(icofilepath));
+
+					std::vector<ICON_GROUP> vInfos = obj.GetIconGroups();
+					icofilepath = icofilepath + _T(".ico");
+					std::wstring tstr = static_cast<const wchar_t*>(icofilepath);
+
+
+					if (obj.ExtractIconGroupToFile(0, tstr))
+					{
+						CNativePatchMFCDlg::LogMessage(_T("[+]exe->ico提取成功："+ icofilepath));
+						if (ReplaceIconOfExeFile(output, icofilepath, 1, 1)) {
+							CNativePatchMFCDlg::LogMessage(_T("[+]ico替换成功"));
+						}
+					}
+					else
+					{
+						CNativePatchMFCDlg::LogMessage(_T("[-]exe->ico提取失败！" ));
+					}
+
+				}
+				else if (extension == _T("ico")) {
+
+					if (ReplaceIconOfExeFile(output, icofilepath, 1, 1)) {
+						CNativePatchMFCDlg::LogMessage(_T("[+]ico替换成功"));
+					}
+
+				}
+				else {
+					CNativePatchMFCDlg::LogMessage(_T("[-]ico文件有误"));
+				}
+			}
+			else {
+				CNativePatchMFCDlg::LogMessage(_T("[-]ico文件有误"));
+			}
 		}
 	}
 	if (((CButton*)GetDlgItem(IDC_CHECK_GUI))->GetCheck() == 1) // 需要修改为GUI程序
@@ -277,3 +371,11 @@ void CNativePatchMFCDlg::LogMessage(CString str)
 	}
 }
 
+
+
+BOOL CNativePatchMFCDlg::OnEraseBkgnd(CDC* pDC)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+
+	return CDialogEx::OnEraseBkgnd(pDC);
+}
